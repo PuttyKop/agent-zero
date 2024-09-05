@@ -11,17 +11,17 @@ class Response:
     
 class Tool:
 
-    def __init__(self, agent: Agent, name: str, args: dict[str,str], message: str, **kwargs) -> None:
+    def __init__(self, agent: Agent, name: str, args: dict[str,str], message: str, args) -> None:
         self.agent = agent
         self.name = name
         self.args = args
         self.message = message
 
     @abstractmethod
-    def execute(self,**kwargs) -> Response:
+    def execute(self, args) -> Response:
         pass
 
-    def before_execution(self, **kwargs):
+    def before_execution(self, args):
         if self.agent.handle_intervention(): return # wait for intervention and handle it, if paused
         PrintStyle(font_color="#1B4F72", padding=True, background_color="white", bold=True).print(f"{self.agent.agent_name}: Using tool '{self.name}':")
         if self.args and isinstance(self.args, dict):
@@ -29,8 +29,8 @@ class Tool:
                 PrintStyle(font_color="#85C1E9", bold=True).stream(self.nice_key(key)+": ")
                 PrintStyle(font_color="#85C1E9", padding=isinstance(value,str) and "\n" in value).stream(value)
                 PrintStyle().print()
-                    
-    def after_execution(self, response: Response, **kwargs):
+
+    def after_execution(self, response: Response, args):
         text = messages.truncate_text(response.message.strip(), self.agent.config.max_tool_response_length)
         msg_response = files.read_file("./prompts/fw.tool_response.md", tool_name=self.name, tool_response=text)
         if self.agent.handle_intervention(): return # wait for intervention and handle it, if paused
@@ -38,7 +38,7 @@ class Tool:
         PrintStyle(font_color="#1B4F72", background_color="white", padding=True, bold=True).print(f"{self.agent.agent_name}: Response from tool '{self.name}':")
         PrintStyle(font_color="#85C1E9").print(response.message)
 
-    def nice_key(self, key:str):
+    def nice_key(self, key:str): 
         words = key.split('_')
         words = [words[0].capitalize()] + [word.lower() for word in words[1:]]
         result = ' '.join(words)

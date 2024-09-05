@@ -11,7 +11,7 @@ from chromadb.errors import InvalidDimensionException
 db: VectorDB | None= None
 
 class Memory(Tool):
-    def execute(self,**kwargs):
+    def execute(self,args):
         result=""
         
         try:

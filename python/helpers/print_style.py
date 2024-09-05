@@ -90,24 +90,24 @@ class PrintStyle:
             with open(PrintStyle.log_file_path, "a") as f:
                 f.write("</pre></body></html>")            
 
-    def get(self, *args, sep=' ', **kwargs):
+    def get(self, sep=' ', args=' '):
         text = sep.join(map(str, args))
         return text, self._get_styled_text(text), self._get_html_styled_text(text)
         
-    def print(self, *args, sep=' ', **kwargs):
+    def print(self, sep=' ', args=' '):
         self._add_padding_if_needed()
         if not PrintStyle.last_endline: 
             print()
             self._log_html("<br>")
-        plain_text, styled_text, html_text = self.get(*args, sep=sep, **kwargs)
+        styled_text, html_text = self.get(sep=sep, args)
         if not self.log_only:
             print(styled_text, end='\n', flush=True)
         self._log_html(html_text+"<br>\n")
         PrintStyle.last_endline = True
 
-    def stream(self, *args, sep=' ', **kwargs):
+    def stream(self, sep=' ',args=' '):
         self._add_padding_if_needed()
-        plain_text, styled_text, html_text = self.get(*args, sep=sep, **kwargs)
+        styled_text, html_text = self.get(*args, sep=sep, args)
         if not self.log_only:
             print(styled_text, end='', flush=True)
         self._log_html(html_text)

@@ -10,12 +10,12 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.language_models.llms import BaseLLM
 from langchain_core.embeddings import Embeddings
 
-@dataclass
+@dataclass 
 class AgentConfig: 
     chat_model: BaseChatModel | BaseLLM
     utility_model: BaseChatModel | BaseLLM
-    embeddings_model:Embeddings
-    memory_subdir: str = ""
+    embeddings_model: Embeddings
+    memory_subdir: str = "memory"
     auto_memory_count: int = 3
     auto_memory_skip: int = 2
     rate_limit_seconds: int = 60
@@ -258,7 +258,7 @@ class Agent:
             PrintStyle(font_color="red", padding=True).print(msg)
 
 
-    def get_tool(self, name: str, args: dict, message: str, **kwargs):
+    def get_tool(self, name: str, args: dict, message: str):
         from python.tools.unknown import Unknown 
         from python.helpers.tool import Tool
         
@@ -272,7 +272,7 @@ class Agent:
                     tool_class = cls[1]
                     break
 
-        return tool_class(agent=self, name=name, args=args, message=message, **kwargs)
+        return tool_class(agent=self, name=name, args=args, message=message)
 
     def fetch_memories(self,reset_skip=False):
         if self.config.auto_memory_count<=0: return ""
@@ -294,5 +294,5 @@ class Agent:
             clean_memories = self.send_adhoc_message(cleanup_prompt,json.dumps(input), output_label="Memory injection")
             return clean_memories
 
-    def call_extension(self, name: str, **kwargs) -> Any:
+    def call_extension(self, name: str, args) -> Any:
         pass

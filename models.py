@@ -22,11 +22,11 @@ def get_api_key(service):
 
 
 # Ollama models
-def get_ollama_chat(model_name:str, temperature=DEFAULT_TEMPERATURE, base_url="http://localhost:11434"):
-    return Ollama(model=model_name,temperature=temperature, base_url=base_url)
+def get_ollama_chat(model_name:str, temperature=DEFAULT_TEMPERATURE, base_url="http://localhost: 11434"): 
+    return Ollama(model=model_name, temperature=temperature, base_url=base_url)
 
-def get_ollama_embedding(model_name:str, temperature=DEFAULT_TEMPERATURE):
-    return OllamaEmbeddings(model=model_name,temperature=temperature)
+def get_ollama_embedding(model_name:str, temperature=DEFAULT_TEMPERATURE):  
+    return OllamaEmbeddings(model=model_name, temperature=temperature)
 
 # HuggingFace models
 

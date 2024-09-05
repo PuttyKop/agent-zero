@@ -1,10 +1,10 @@
 import os
 from agent import Agent
-from . import online_knowledge_tool
+from python.tools import online_knowledge_tool
 from python.helpers import perplexity_search
 from python.helpers import duckduckgo_search
 
-from . import memory_tool
+from python.tools import memory_tool
 import concurrent.futures
 
 from python.helpers.tool import Tool, Response
@@ -12,7 +12,7 @@ from python.helpers import files
 from python.helpers.print_style import PrintStyle
 
 class Knowledge(Tool):
-    def execute(self, question="", **kwargs):
+    def execute(self, question="", args=""):
         with concurrent.futures.ThreadPoolExecutor() as executor:
             # Schedule the two functions to be run in parallel
 
